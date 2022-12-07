@@ -1,0 +1,118 @@
+let limiteExtraccion = 15000;
+let saldoCuenta = 0;
+let dineroExtraido;
+let dineroDepositado;
+const agregar = document.querySelector('#agregar');
+const agregar1 = document.querySelector('#agregar1');
+const agregar2 = document.querySelector('#agregar2');
+const agregar3 = document.querySelector('#agregar3');
+const agregar4 = document.querySelector('#agregar4');
+
+
+actualizarSaldoEnPantalla();
+actualizarLimiteEnPantalla();
+
+
+function sumarDinero(cantidad) {
+    saldoCuenta += cantidad;
+  }
+  
+  function restarDinero(cantidad) {
+    saldoCuenta -= cantidad;
+}
+function mostrarOperacion(alertaDeOperacion, accionDeOperacion, transaccionDeDinero) {
+    console.log(
+        "Has " + alertaDeOperacion + ": $" + transaccionDeDinero + "\n" +
+        "Saldo anterior: $" + accionDeOperacion + "\n" +
+        "Saldo actual: $" + saldoCuenta
+    );
+}
+
+agregar1.addEventListener('click', ()=>{
+    let div1=document.createElement('div')
+    div1.innerHTML += `<input type="text" name="nombre[]" placeholder="Dinero a depositar" required id="depositar">
+    <button class="btn btn-success" id="din">Depositar</button>`
+    const contenedor1 = document.querySelector('#dinamic1')
+    contenedor1.appendChild(div1);
+    document.getElementById("din").addEventListener("click", ()=>{
+      let dineroDepositado = parseInt(document.getElementById("depositar").value);
+      if (dineroDepositado == null || dineroDepositado == "") {
+        console.log("No se ingreso monto para dipositar.");
+      } else if (isNaN(dineroDepositado)) {
+        console.log("Ingresa solo el monto.");
+      } else if(dineroDepositado != null) {
+        sumarDinero(dineroDepositado);
+        mostrarOperacion("depositado",saldoCuenta - dineroDepositado,dineroDepositado);
+          actualizarSaldoEnPantalla();
+        div1.innerHTML = ``;
+      }
+    });
+    
+})
+
+agregar.addEventListener('click', ()=>{
+  let div=document.createElement('div')
+  div.innerHTML += `<input type="text" name="nombre[]" placeholder="Dinero a Extraer" required id="extraer">
+  <button class="btn btn-success" id="ext">Extraer</button>`
+  const contenedor = document.querySelector('#dinamic')
+  contenedor.appendChild(div);
+  document.getElementById("ext").addEventListener("click", ()=>{
+    let dineroExtraido = parseInt(document.getElementById("extraer").value);
+    if (dineroExtraido == null || dineroExtraido == "") {
+      console.log("No se detectaron caracteres.");
+    }
+    if (dineroExtraido > saldoCuenta) {
+      console.log("No hay monto suficiente");
+    } else if (dineroExtraido > limiteExtraccion) {
+      console.log("La cantidad es mas grande que tu limite de extraccion.");
+    } else if(dineroExtraido != null) {
+      restarDinero(dineroExtraido);
+      mostrarOperacion("extraer",saldoCuenta - dineroDepositado,dineroDepositado);
+        actualizarSaldoEnPantalla();
+      div.innerHTML = ``;
+    }
+  })
+})
+
+agregar3.addEventListener('click', ()=>{
+  let div3=document.createElement('div')
+  div3.innerHTML += `<input type="text" name="nombre[]" placeholder="Cheque a depositar" required id="cheque">
+  <button class="btn btn-success" id="cheq">Depositar Cheque</button>`
+  
+  const contenedor3 = document.querySelector('#dinamic3')
+  contenedor3.appendChild(div3);
+  document.getElementById("cheq").addEventListener("click", ()=>{
+    let montoDecheque = parseInt(document.getElementById("cheque").value);
+    if (montoDecheque == null || montoDecheque == "") {
+      alert("No ingreso monto para el deposito.");
+    } else {
+        var montochequeDepositado = parseInt(montoDecheque);
+        if (isNaN(montochequeDepositado)) {
+              alert("Ingrese solo el monto.");
+          } else if (montochequeDepositado < 1000) {
+              alert("Solo se aceptan cheques desde $1000");
+          } else {
+              sumarDinero(montochequeDepositado);
+              mostrarOperacion(
+                  "depositado un cheque con el monto",
+                  saldoCuenta - montochequeDepositado,
+                  montochequeDepositado
+              );
+              actualizarSaldoEnPantalla();
+          }
+      }
+  })
+})
+
+document.getElementById("nombre").innerHTML = Storage.getitem("usuario")
+
+
+
+
+function actualizarSaldoEnPantalla() {
+  document.getElementById("saldo-cuenta").innerHTML = "$" + saldoCuenta;
+}
+  
+function actualizarLimiteEnPantalla() {
+  document.getElementById("limite-extraccion").innerHTML = "Tu límite de extracción es: $" + limiteExtraccion;
+}
