@@ -21,11 +21,7 @@ function sumarDinero(cantidad) {
     saldoCuenta -= cantidad;
 }
 function mostrarOperacion(alertaDeOperacion, accionDeOperacion, transaccionDeDinero) {
-  console.log(
-      "Has " + alertaDeOperacion + ": $" + transaccionDeDinero + "\n" +
-      "Saldo anterior: $" + accionDeOperacion + "\n" +
-      "Saldo actual: $" + saldoCuenta
-  );
+  alerta(4500, 'success', '', 'logrado', 'Has '+ alertaDeOperacion + ": $" + transaccionDeDinero + "\n" + "Saldo anterior: $" + accionDeOperacion + "\n" + "Saldo actual: $" + saldoCuenta)
 }
 
 agregar1.addEventListener('click', ()=>{
@@ -103,6 +99,27 @@ agregar3.addEventListener('click', ()=>{
       }
   })
 })
+
+agregar4.addEventListener('click', ()=>{
+  let div4=document.createElement('div')
+  div4.innerHTML += `<input type="text" name="nombre[]" placeholder="Dinero a depositar" required id="cambiar">
+  <button class="btn btn-success" id="cambiar limite">cambiar limite</button>`
+  const contenedor4 = document.querySelector('#dinamic4')
+  contenedor4.appendChild(div4);
+  document.getElementById("cambiar limite").addEventListener("click", ()=>{
+    let cambiarLimiteDeExtraccion = parseInt(document.getElementById("cambiar").value);
+    if (cambiarLimiteDeExtraccion == null || cambiarLimiteDeExtraccion == "") {
+      alerta(4500, 'error','','Algo salio mal', 'No se ingreso el nuevo límite de Extracción.' );
+    } else {
+      limiteExtraccion = parseInt(cambiarLimiteDeExtraccion);
+      alerta(4500, 'success', '', 'logrado',"El nuevo límte de extraccón es: $" + limiteExtraccion )
+      actualizarLimiteEnPantalla();
+      div4.innerHTML = ``;
+    }
+  });
+})
+
+
 
 const alerta = (timer, icon, position, tittle, text) =>{
   Swal.fire({
