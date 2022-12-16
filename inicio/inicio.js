@@ -21,11 +21,11 @@ function sumarDinero(cantidad) {
     saldoCuenta -= cantidad;
 }
 function mostrarOperacion(alertaDeOperacion, accionDeOperacion, transaccionDeDinero) {
-    console.log(
-        "Has " + alertaDeOperacion + ": $" + transaccionDeDinero + "\n" +
-        "Saldo anterior: $" + accionDeOperacion + "\n" +
-        "Saldo actual: $" + saldoCuenta
-    );
+  console.log(
+      "Has " + alertaDeOperacion + ": $" + transaccionDeDinero + "\n" +
+      "Saldo anterior: $" + accionDeOperacion + "\n" +
+      "Saldo actual: $" + saldoCuenta
+  );
 }
 
 agregar1.addEventListener('click', ()=>{
@@ -37,9 +37,9 @@ agregar1.addEventListener('click', ()=>{
     document.getElementById("din").addEventListener("click", ()=>{
       let dineroDepositado = parseInt(document.getElementById("depositar").value);
       if (dineroDepositado == null || dineroDepositado == "") {
-        console.log("No se ingreso monto para dipositar.");
+        alerta(4500, 'error','', 'error','Algo salio mal', 'No se ingreso monto para dipositar.' );
       } else if (isNaN(dineroDepositado)) {
-        console.log("Ingresa solo el monto.");
+        alerta(4500, 'error','', 'error','Algo salio mal', 'No se ingreso monto para dipositar.' );
       } else if(dineroDepositado != null) {
         sumarDinero(dineroDepositado);
         mostrarOperacion("depositado",saldoCuenta - dineroDepositado,dineroDepositado);
@@ -59,12 +59,12 @@ agregar.addEventListener('click', ()=>{
   document.getElementById("ext").addEventListener("click", ()=>{
     let dineroExtraido = parseInt(document.getElementById("extraer").value);
     if (dineroExtraido == null || dineroExtraido == "") {
-      console.log("No se detectaron caracteres.");
+      alerta(4500, 'error','', 'error','No se ingreso monto para dipositar.',  );
     }
     if (dineroExtraido > saldoCuenta) {
-      console.log("No hay monto suficiente");
+      alerta(4500, 'error','','Algo salio mal', 'No hay monto suficiente.' );
     } else if (dineroExtraido > limiteExtraccion) {
-      console.log("La cantidad es mas grande que tu limite de extraccion.");
+      alerta(4500, 'error','','Algo salio mal', 'La cantidad es mas grande que tu limite de extraccion.' );
     } else if(dineroExtraido != null) {
       restarDinero(dineroExtraido);
       mostrarOperacion("extraer",saldoCuenta - dineroDepositado,dineroDepositado);
@@ -84,13 +84,13 @@ agregar3.addEventListener('click', ()=>{
   document.getElementById("cheq").addEventListener("click", ()=>{
     let montoDecheque = parseInt(document.getElementById("cheque").value);
     if (montoDecheque == null || montoDecheque == "") {
-      alert("No ingreso monto para el deposito.");
+      alerta(4500, 'error','','Algo salio mal', 'No ingreso monto para el deposito.' );
     } else {
         var montochequeDepositado = parseInt(montoDecheque);
         if (isNaN(montochequeDepositado)) {
-              alert("Ingrese solo el monto.");
+          alerta(4500, 'error','','Algo salio mal', 'Ingrese solo el monto.');
           } else if (montochequeDepositado < 1000) {
-              alert("Solo se aceptan cheques desde $1000");
+            alerta(4500, 'error','','Algo salio mal', 'Solo se aceptan cheques desde $1000.');
           } else {
               sumarDinero(montochequeDepositado);
               mostrarOperacion(
@@ -104,10 +104,18 @@ agregar3.addEventListener('click', ()=>{
   })
 })
 
+const alerta = (timer, icon, position, tittle, text) =>{
+  Swal.fire({
+    position: position || 'center',
+    icon: icon|| 'info',
+    title: tittle || "",
+    showConfirmButton: false,
+    confirmButtonText:'Aceptar',
+    timer: timer,
+    text: text || ''
+  })
+}
 document.getElementById("nombre").innerHTML = Storage.getitem("usuario")
-
-
-
 
 function actualizarSaldoEnPantalla() {
   document.getElementById("saldo-cuenta").innerHTML = "$" + saldoCuenta;
