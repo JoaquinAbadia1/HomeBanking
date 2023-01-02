@@ -132,7 +132,8 @@ const alerta = (timer, icon, position, tittle, text) =>{
     text: text || ''
   })
 }
-document.getElementById("nombre").innerHTML = Storage.getitem("usuario")
+
+document.getElementById("nombre").innerHTML = localStorage.getItem("usuario")
 
 function actualizarSaldoEnPantalla() {
   document.getElementById("saldo-cuenta").innerHTML = "$" + saldoCuenta;
